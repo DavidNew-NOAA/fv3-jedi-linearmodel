@@ -154,7 +154,7 @@ integer, intent(out) :: nlon, nlat, nlev, ntime
       Files(n)%field_index = 0
       do i = 1, Files(n)%nvar
          name = var_names(i)
-         call get_variable_num_dimensions(Files(n)%fileobj, trim(name), nd)
+         nd = get_variable_num_dimensions(Files(n)%fileobj, trim(name))
          if (nd > 0) then
             call get_variable_size(Files(n)%fileobj, trim(name), siz(1:nd))
          endif

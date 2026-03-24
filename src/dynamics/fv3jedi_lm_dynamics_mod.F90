@@ -6,7 +6,8 @@ use fv3jedi_lm_const_mod
 
 use fms_mod,         only: set_domain, nullify_domain
 use fms2_io_mod,     only: FmsNetcdfDomainFile_t, open_file, close_file, &
-                           register_restart_field, read_restart, write_restart
+                           register_restart_field, register_axis, &
+                           read_restart, write_restart
 use mpp_mod,         only: mpp_pe, mpp_root_pe, mpp_error, FATAL
 use mpp_domains_mod, only: mpp_update_domains, mpp_get_boundary, DGRID_NE, mpp_get_boundary_ad
 
@@ -319,10 +320,13 @@ subroutine write_d_grid_winds(self, dpath, fname, traj)
   ! Build full file path
   fpath = trim(adjustl(dpath))//'/'//trim(fname)
 
-  ! Open, register, write, close
+  ! Open, register axes and fields, write, close
   if (open_file(rst, trim(fpath), 'overwrite', self%FV_Atm(1)%domain, is_restart=.true.)) then
-    call register_restart_field(rst, 'u', u)
-    call register_restart_field(rst, 'v', v)
+    call register_axis(rst, 'xaxis_1', 'x')
+    call register_axis(rst, 'yaxis_1', 'y')
+    call register_axis(rst, 'zaxis_1', npz)
+    call register_restart_field(rst, 'u', u, (/'xaxis_1', 'yaxis_1', 'zaxis_1'/))
+    call register_restart_field(rst, 'v', v, (/'xaxis_1', 'yaxis_1', 'zaxis_1'/))
     call write_restart(rst)
     call close_file(rst)
   endif

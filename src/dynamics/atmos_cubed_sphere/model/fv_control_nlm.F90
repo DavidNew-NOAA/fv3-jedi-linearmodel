@@ -619,7 +619,7 @@ module fv_control_nlm_mod
          endif
 
          if (size(Atm) > 1) then
-            call mpp_error(FATAL, "Nesting not implemented with input_nml_file")
+            call mpp_error(FATAL, "Nesting not implemented with INTERNAL_FILE_NML")
          endif
    ! Read FVCORE namelist
       read (input_nml_file,fv_core_nml,iostat=ios)
